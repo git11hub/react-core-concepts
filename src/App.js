@@ -1,25 +1,109 @@
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const nayoks = ['Rubel Rana', 'Abul Rana', 'Mokbul Rana', 'Alom khan', 'Kobir khan', 'Amir Khan', 'Shahrukh Khan', 'Amitab Bacchan']
+  const products= [
+    {name: 'Photoshop', price: '$90.99'},
+    {name: 'Illustrator', price: '$60.99'},
+    {name: 'PDF Reader', Price: '$6.99'},
+    {name: 'Premiere Something', Price: '$249.99'},
+  ]
+  // const productNames = products.map(product => product.name);
+  // console.log(productNames);
+  const nayokNames = nayoks.map(nayok => nayok);
+  // console.log(nayokNames);
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit Done <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        
+        <p>I am a react person</p>
+        <Counter></Counter>
+        <Users></Users>
+        <ul>
+          {
+            nayoks.map(nayok => <li>{nayok}</li>)
+          }
+          {
+            products.map(product => <li>{product.name}</li>)
+          }
+        </ul>
+          {
+            products.map(pd => <Product product={pd}></Product>)
+          }
+        
+
+        <Person name={nayoks[0]} bibi="Kulsum Bibi"></Person>
+        <Person name={nayoks[1]} bibi="Sokina Bibi"></Person>
+        <Person name={nayoks[2]} bibi="Korimon"></Person>
       </header>
     </div>
   );
 }
 
+function Counter(){
+  const [count, setCount] = useState(10);
+  // const handleIncrease = () => setCount(count+10);
+  return(
+    <div>
+      <h1>Count: {count}</h1>
+      <button onMouseMove = {() => setCount(count-10)}>Decrease</button>
+      <button onMouseMove = {() => setCount(count+10)}>Increase</button>
+    </div>
+  )
+}
+function Users(){
+  const [users, setUsers] = useState([]);
+  useEffect(()=> {
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    .then(data => setUsers(data))    
+  },[])
+
+  return(    
+    <div>
+      <h3>Dynamic Users: {users.length}</h3>
+      <ul>
+        {
+          users.map(user => <li>{user.name}</li>)
+        }
+      </ul>      
+    </div>
+  )
+}
+
+function Product(props){
+  const productStyle={
+    border:'1px solid gray',
+    borderRadius: '5px',
+    backgroundColor: 'lightgray',
+    height: '200px',
+    width: '200px',
+    float: 'left'
+  }
+  const {name, price} = props.product;
+  // console.log(name, price);
+  return (
+    <div style={productStyle}>
+        <h3>{name}</h3>
+        <h5>{price}</h5>
+        <button>Buy now</button>
+    </div>
+  )
+}
+
+function Person(props) {
+  const personStyle = {
+    border: '2px solid yellow',
+    margin: '10px'
+  }
+  // console.log(props);
+  return (
+    <div style={personStyle}>
+      <h1>Name: {props.name+" "+props.bibi}</h1>
+      <h3>Hero of {props.bibi}</h3>
+    </div>
+  )
+}
 export default App;
